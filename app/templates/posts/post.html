@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Posts</h1>
+
+<table  class="table table-striped">
+    <tr>
+        <th colspan="4">Post List for {{ date }}</th>
+    </tr>
+
+    {% for post in posts %}
+    <tr>
+        <td>
+            {{
+                post['post']
+            }}
+        </td>
+        <td>{{ post['emoticon'] | safe }}</td>
+        <td>
+            <form class='form-inline' method='post' action="{{url_for('.create_emoticon')}}">
+            <p class="text-right">
+                <select name="post_emoticon" class="selectpicker">
+                    <option>Select Emoticon</option>
+                    {% for select_emoticon in select_emoticons %}
+                        <option value="{{ select_emoticon['Code'] }}">{{ select_emoticon['Name'] }} {{ select_emoticon['Code'] | safe }}</option>
+                    {% endfor %}
+                </select>
+            <input type="hidden" name="post_id" value="{{ post['_id'] }}">
+            <input class='btn btn-primary' type='submit' value="Add Emoticon" />
+            </p>
+            </form>
+        </td>
+        <td><form class='form-inline' method='post' action="{{url_for('.delete_post')}}">
+                <input type="hidden" name="post_id" value="{{ post['_id'] }}">
+                <p class="text-right"><input class='btn btn-primary' type="submit" value="Delete Post"></p>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<h2>Add Post</h2>
+
+{% with messages = get_flashed_messages(category_filter=["create_post_success"]) %}
+
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{message}}
+        </div>
+    {% endfor %}
+
+{% endwith%}
+
+{% with messages_emoticons = get_flashed_messages(category_filter=["create_emoticon_success"]) %}
+
+    {% for messages_emoticon in messages_emoticons %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{messages_emoticon}}
+        </div>
+    {% endfor %}
+
+{% endwith%}
+
+{% with messages_deleted = get_flashed_messages(category_filter=["delete_success"]) %}
+
+    {% for messages_delete in messages_deleted %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{messages_deleted}}
+        </div>
+    {% endfor %}
+
+{% endwith%}
+
+<form class='form-inline' method='post' action="{{url_for('.create_post')}}">
+    <input class='form-control' type='text' name='new_post' placeholder='Add Post'/>
+    <input class='btn btn-primary' type='submit' />
+</form>
+
+{% endblock %}

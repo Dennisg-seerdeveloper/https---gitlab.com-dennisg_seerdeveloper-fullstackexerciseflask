@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bucket List - Login
+{% endblock %}
+
+{% block cssimports %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/signin.css')}}"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<form class='form-signin' method='post' action="{{url_for('default.login_submit')}}">
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <input class='form-control' type='text' name='username' placeholder='Username'/><br />
+    <input class='form-control' type='password' name='password' placeholder='Password'/><br />
+    {% with messages = get_flashed_messages(category_filter=["signin_failure"]) %}
+    {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{message}}
+        </div>
+    {% endfor %}
+    {% endwith%}
+    <input class='btn btn-lg btn-primary btn-block' type='submit' />
+</form>
+</div>
+{% endblock %}
